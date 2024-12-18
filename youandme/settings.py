@@ -32,12 +32,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django default apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    # My custom apps
+    "rest_framework",
+    'django_filters',
+    "youandme.users",
+    "youandme.posts",
+    
 ]
 
 MIDDLEWARE = [
@@ -70,6 +78,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "youandme.wsgi.application"
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',  # Primary authentication method
+        'rest_framework.authentication.SessionAuthentication',         # For session-based authentication (admin panel)
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Require authentication for all API views by default
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  # Number of results per page for paginated views
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -85,10 +104,12 @@ DATABASES = {
     }
 }
 
+# When you create a custom user model by extending AbstractUser, you need to explicitly 
+# tell Django to use your CustomUser model instead of the default User.
+AUTH_USER_MODEL = "users.CustomUser"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",

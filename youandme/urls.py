@@ -16,8 +16,21 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from youandme.posts.views import PostViewSet, CommentViewSet, LikeViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+# Create a DefaultRouter instance and register the viewsets
+router = DefaultRouter()
+router.register(r'posts', PostViewSet, basename='post')
+router.register(r'comments', CommentViewSet, basename='comment')
+router.register(r'likes', LikeViewSet, basename='like')
+
+# Define URL patterns
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('api/', include(router.urls)),  # Use the correct router instance
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
