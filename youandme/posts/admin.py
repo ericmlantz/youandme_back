@@ -5,7 +5,7 @@ from .models import Post, Comment, Like
 
 @admin.register(Post) # @admin.register - Registers the models with the admin site
 class PostAdmin(admin.ModelAdmin):
-    # ist_display: Specifies the fields to display in the list view in the admin panel
+    # list_display: Specifies the fields to display in the list view in the admin panel
     list_display = ('id','author','content','created_at','updated_at')
     # search_fields: Adds a search box that searches the specified fields (e.g., usernames, post content).
     
